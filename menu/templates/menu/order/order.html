@@ -1,0 +1,13 @@
+<meta charset="utf-8">
+<h1>주문서</h1>
+<body>
+<form action="{% url 'menu:order_detail' store_name=store_name menu_name=menu_name %} " method="post" >
+    {% csrf_token %}
+    <p> 가게 이름: {{store_name}}</p>
+    <p> 메뉴: {{menu_name}} </p>
+    <p> 가격: {{price}} </p>
+    <p> 배송지: <input type="text", name="location"></p>
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
+</body>

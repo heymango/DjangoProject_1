@@ -1,0 +1,7 @@
+<meta charset="UTF-8">
+
+<form action="{% url 'menu:addStore' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>

@@ -1,0 +1,7 @@
+{% if stores %}
+    {% for store in stores %}
+        <ul>
+            <li><a href="/menu/showStores/{{store.store_name}}"> {{store.store_name}} </a></li>
+        </ul>
+    {% endfor %}
+{% endif %}

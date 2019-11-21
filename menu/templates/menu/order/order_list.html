@@ -1,0 +1,14 @@
+<meta charset="UTF-8">
+{% if order_list %}
+{% for order in order_list %}
+    <ul>
+        <li><a href="/menu/orderList/{{order.id}}">
+            주문자 성함: {{order.name}} <br>
+            음식점: {{order.store_name}} <br>
+            메뉴: {{order.menu_name}} <br>
+            장소: {{order.location}} <br>
+            주문시각: {{order.time}} <br>
+        </a></li>
+    </ul>
+{% endfor %}
+{% endif%}

@@ -1,0 +1,7 @@
+{% if menus %}
+    {% for menu in menus %}
+        <ul>
+           <li> {{menu.menu_name}} {{menu.price}} {{menu.store_name}}</li>
+        </ul>
+    {% endfor %}
+{% endif %}
