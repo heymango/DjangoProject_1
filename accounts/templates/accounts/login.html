@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<!--
+	Eventually by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+{% load static %}
+<html>
+	<head>
+		<title>Login</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'accounts/assets/css/main.css' %}" />
+	</head>
+	<body class="is-preload">
+	<div style="width:300px; height:100px;">
+		<!-- Header -->
+			<header id="header">
+				<h1>Login</h1>
+			</header>
+	</div>
+		<!-- Signup Form -->
+			<form method="post" action="{%url 'signup:login'%}">{% csrf_token %}
+				<div style="width:300px; height:150px;">
+				<input type="text" name="username" placeholder="User Id" />
+				<input type="password" name="password" placeholder="Password" />
+					{% if messages %}
+					{% for message in messages %}
+						{{ message.message }}
+					{% endfor %}
+				{% endif %}
+				</div>
+				<div style="width: 200px; margin: 15px 25px 15px 0px;">
+				<input type="submit" class="btn btn-primary" value="login" />
+					<input type="submit" class="btn btn-primary" value="signin" name="signin" />
+					</div>
+
+			</form>
+		<!-- Scripts -->
+			<script src="{% static 'accounts/assets/js/main.js'%}"></script>
+
+	</body>
+</html>
