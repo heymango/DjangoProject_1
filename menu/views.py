@@ -3,8 +3,7 @@ from .models import *
 from django.views.generic import View
 from .forms import *
 from datetime import datetime
-
-
+'''
 class AddMenu(View):
     def post(self, request):
         form = AddMenuForm(request.POST)
@@ -20,14 +19,14 @@ class AddMenu(View):
     def get(self, request):
         form = AddMenuForm()
         return render(request, 'menu/menu/add_menu.html', {'form': form})
-
-
+'''
+'''
 class ShowMenus(View):
     def get(self, request):
         menus = Menu.objects.all()
         return render(request, 'menu/menu/show_menus.html', {'menus': menus})
-
-
+'''
+'''
 class AddStore(View):
     def post(self, request):
         form = AddStoreForm(request.POST)
@@ -65,7 +64,7 @@ class StoreDetail(View):
 
 class Order(View):
     def get(self, request, store_name, menu_name):
-        menus = get_list_or_404(Menu, menu_name=menu_name)
+        menus = get_list_or_404(menu, menu_name=menu_name)
         for menu in menus:
             if menu.store_name == store_name:
                 price = menu.price
@@ -100,3 +99,5 @@ class OrderListDetail(View):
             message = "아직입니다. 더 기다려주세요"
 
         return render(request, 'menu/order/order_list_detail.html', {'message': message})
+
+'''

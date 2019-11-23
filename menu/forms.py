@@ -1,6 +1,6 @@
 from django import forms
 from .models import *
-
+'''
 
 class AddMenuForm(forms.Form):
     menu_name = forms.CharField(label='Menu name', max_length=100)
@@ -15,3 +15,4 @@ class AddStoreForm(forms.Form):
     location = forms.CharField(max_length=200)
     tel = forms.CharField(max_length=20)
 
+'''

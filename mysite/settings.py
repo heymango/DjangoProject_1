@@ -93,6 +93,14 @@ DATABASES = {
         'PORT': '3306',
         'USER': 'root',
         'PASSWORD': 'yongyong19',
+    },
+    'cafe': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cafe',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'USER': 'root',
+        'PASSWORD': 'yongyong19',
     }
 }
 
