@@ -1,13 +1,36 @@
+{% load static %}
+<head>
 <meta charset="utf-8">
 <h1>주문서</h1>
+</head>
+
 <body>
-<form action="{% url 'menu:order_detail' store_name=store_name menu_name=menu_name %} " method="post" >
+<form action="{% url 'menu:order' %} " method="post" >
+    <div class="container">
     {% csrf_token %}
-    <p> 가게 이름: {{store_name}}</p>
-    <p> 메뉴: {{menu_name}} </p>
-    <p> 가격: {{price}} </p>
-    <p> 배송지: <input type="text", name="location"></p>
-    <br><br>
-    <input type="submit" value="Submit">
+        </div>
+    <p> 가게 이름:
+        {% if menulist %}{{storename}}
+          {% elif menu %}{{storename}}
+            {% else %}<select name='store'>
+                {% for store in datalist %}
+                    <option value={{store.store}}>{{store.store}}</option>
+                {% endfor %} </select>
+        <input type="submit" value="Select store">
+        {% endif %}
+    <p> 메뉴:  {% if menu %}{{menu}}
+    {% else %}<select name='menu'>
+        {% for menu in menulist %}
+            <option value={{menu.menu}}>{{menu.menu}}</option>
+        {% endfor %} </select> <input type="submit" value="Select menu" name="submit_menu">
+    {% endif %}
+    <p> 가격: {% if menu %}{{price}}{% endif %}</p>
+    <p> 장소 :<input type = "text" name = "place"/></p>
+    <p>시간 : <input type='time' name = "time"/><br> </p>
+    <input type="submit" value='Order it!' name = "submit_order">
+    {% if messages %}
+    <script type="text/javascript">
+        alert({{messages.messages}}); </script>
+    <a href="http://127.0.0.1:8000/accounts/logout"></a>{% endif %}
 </form>
 </body>

@@ -58,7 +58,7 @@ def signup(request):
 
 def login(request):
     db = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='yongyong19', db='accounts', charset='utf8')
-    if request.POST.get('signin') == "signin":
+    if request.POST.get('signup') == "signup":
         return redirect('/accounts/signup/')
     if request.method == "POST":
         username = request.POST['username']

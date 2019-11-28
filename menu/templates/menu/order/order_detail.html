@@ -1,7 +1,4 @@
 <meta charset="UTF-8">
-
-<h1>{{store_name}} {{menu_name}}이(가) {{location}}로 주문 완료!</h1>
-
-<form action="{% url 'menu:addStore' %}" method="get">
-    <input type="submit" value="Submit">
-</form>
+{% for detail in detail %}
+<h1>I want {{detail.store_name}} {{detail.menu_name}} until {{detail.time}} at {{detail.location}}</h1>
+{% endfor %}
