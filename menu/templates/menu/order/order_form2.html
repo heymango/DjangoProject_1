@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+{% load static %}
+<html>
+<head>
+    <title>Order!</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="{% static 'home/assets/css/main.css' %}"/>
+    <noscript>
+        <link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}"/>
+    </noscript>
+</head>
+<body class="is-preload">
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+        <div class="inner">
+
+        </div>
+    </header>
+
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+            <h1>Order</h1>
+
+            <section>
+                <h2>Let's Drink!</h2>
+                <form method="post" action="{% url 'menu:order2' %}">
+                    {% csrf_token %}
+                    <div class="row gtr-uniform">
+
+
+                        <div class="col-12">
+							<b><font size="5">Select Store</font></b><br>
+                            <select name='store'>
+                                {% for store in datalist %}
+                                <option value={{store.store}}>{{store.store}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                            <link rel="stylesheet" href="/resources/demos/style.css">
+                            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+                            <script src="/resources/demos/external/jquery-mousewheel/jquery.mousewheel.js"></script>
+                            <p id="output"></p>
+                            <script>
+												 	var x = setInterval(function() {
+												 	var spinner = $( "#spinner" ).spinner();
+												 	var spinner2 = $( "#spinner" ).spinner();
+												 	var tip = spinner.spinner( "value" )*1;
+
+
+                            </script>
+                            <p>
+                                <label for="spinner"><b><font size="5">Select Tip!</font></b></label>
+                                <input id="spinner" name="point" type="number" value="500" min="500" max="1500"
+                                       step="10">
+                            </p>
+
+                        </div>
+                        <div class="col-12">
+                            <b><font size="5">Select number of drinks you can deliver </font></b><br>
+                            <input name="drinknum" placeholder="Enter number"/>
+                        </div>
+
+                        <div class="col-12">
+                            <b><font size="5">Location</font></b>
+                            <textarea name="place" placeholder="Enter your location"></textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <div style="width:30%">
+                                <b><font size="5">Check the time</font></b>
+                            </div>
+                            <div style="width : 50%">
+                                <input type='time' name="time"/></div>
+                        </div>
+                        <br>
+                        <div class="col-12">
+                            <ul class="actions">
+                                <li><input type="submit" value="Order it!" class="primary" name="submit_order"/></li>
+                                <li><input type="submit" value="Go Home" class="primary" name="GoHome"/></li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'home/assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'home/assets/js/browser.min.js' %}"></script>
+<script src="{% static 'home/assets/js/breakpoints.min.js' %}"></script>
+<script src="{% static 'home/assets/js/util.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script>
+
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="/resources/demos/external/jquery-mousewheel/jquery.mousewheel.js"></script>
+<script>
+  $( function() {
+    var spinner = $( "#spinner" ).spinner();
+  } );
+
+
+
+
+</script>
+
+</body>
+</html>

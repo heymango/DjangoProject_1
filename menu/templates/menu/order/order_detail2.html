@@ -7,7 +7,7 @@
 {% load static %}
 <html>
 <head>
-    <title>Order Detail</title>
+    <title>Detail</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <link rel="stylesheet" href="{% static 'home/assets/css/main.css' %}"/>
@@ -23,22 +23,47 @@
     <!-- Main -->
     <div id="main">
         <div class="inner">
-            <h1>Order Detail</h1>
+            <h1>Detail</h1>
             <section>
                 <form method="post"> {% csrf_token %}
                     <div class="row gtr-uniform">
                         <div class="col-12">
                             <hr/>
                             {% for detail in detail %}
-                            <b><font size="7" color="#f2849e">{{detail.user_name}} </font><font size="6">wants to
-                                drink </font>
-                                <br><br><font size="7" color="#f2849e">{{detail.store_name}} {{detail.menu_name}}</font>
+                            <b><font size="7" color="#f2849e">User :{{detail.user_name}}</font>
+                                <br><br><font size="7">Would you like </font><font size="7" color="#f2849e">{{detail.store_name}}'s
+                                    drink?</font>
                                 <br><br><font size="7">Location : <font color="#f2849e">{{detail.location}}</font>
-                                    / Time : until <font color="#f2849e">{{detail.time}}</font></font></b>
+                                    / Time : until <font
+                                            color="#f2849e">{{detail.time}}<br>{{detail.numremain}}</font> orders
+                                    left!</font></b>
                             <br><br>
-                            <!-- Display the countdown timer in an element -->
-                            <p id="demo"></p>
-                            <script>
+                        </div>
+
+
+
+                        <div style="width:70%">
+                            {% if menuinfo %}
+                            {% for menuinfo in menuinfo %}
+                            <b><font size="7">{{menuinfo.menu}} <br>Price : {{menuinfo.price}} + {{detail.point}} = <font color ="#f2849e">{{menuinfo.totalprice}}</font></font></b>
+                            {% endfor %}
+                            {% else %}
+                            <select name='menu'>
+                                {% for menu in menu %}
+                                <option value={{menu.menu}}><font color="black">{{menu.menu}}</font></option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <div style="width:30%">
+                            <input type="submit" value="Select menu!" class="primary" name="menu_name"/>
+                            {% endif %}
+                        </div>
+
+                        <!-- Display the countdown timer in an element -->
+                        <p id="demo"></p>
+                        <script>
 												// Set the date we're counting down to
 
 												var jbString ='{{detail.time}}';
@@ -64,23 +89,23 @@
  												var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
   												// Display the result in the element with id="demo"
-
+                                                if(distance>0){
  												document.getElementById("demo").innerHTML = "<b><font color='red' size = '7'>"+hours + "h "
  													 + minutes + "m " + seconds + "s Left"+"</font></b>";
-
+                                                }
   												// If the count down is finished, write some text
-  												if (distance < 0) {
-   													clearInterval(x);
-    												document.getElementById("demo").innerHTML = "Time Out";
-  												}
+
 												}, 1000);
 
-                            </script>
-                            {% endfor %}
-                            <hr/>
-                            <input type="submit" value="Ok, I'll take it" class="primary"/>
 
-                        </div>
+
+
+                        </script>
+                        {% endfor %}
+
+                        <div class="col-12">
+                            <input type="submit" value="Ok, I'll take it" class="primary" name="submit"/></div>
+
                     </div>
                 </form>
             </section>

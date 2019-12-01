@@ -6,127 +6,240 @@
 -->
 {% load static %}
 <html>
-	<head>
-		<title>HOME</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'home/assets/css/main.css' %}" />
-		<noscript><link rel="stylesheet" href="{% static 'home/assets/css/noscript.css' %}" /></noscript>
-	</head>
-	<body class="is-preload">
-		<!-- Wrapper -->
-			<div id="wrapper">
 
-				<!-- Header -->
-					<header id="header">
-						<div class="inner">
+<head>
+    <title>HOME</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="{% static 'home/assets/css/main.css' %}"/>
+    <noscript>
+        <link rel="stylesheet" href="{% static 'home/assets/css/noscript.css' %}"/>
+    </noscript>
+</head>
+<style>
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
 
-							<!-- Logo -->
-								<a href="index.html" class="logo">
-									<span class="symbol"><img src="{% static 'home/images/logo.svg' %}" alt="" /></span><span class="title">MainPage</span>
-								</a>
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
 
-							<!-- Nav -->
-								<nav>
-									<ul>
-										<li><a href="#menu">Menu</a></li>
-									</ul>
-								</nav>
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  min-width: 250px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
 
-						</div>
-					</header>
+/* Links inside the dropdown */
+.dropdown-content a {
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
 
-				<!-- Menu -->
-					<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li><a href="index.html">Home</a></li>
-							<li><a href="generic.html">Ipsum veroeros</a></li>
-							<li><a href="generic.html">Tempus etiam</a></li>
-							<li><a href="generic.html">Consequat dolor</a></li>
-							<li><a href="elements.html">Elements</a></li>
-						</ul>
-					</nav>
+/* Change color of dropdown links on hover */
 
-				<!-- Main -->
-					<div id="main">
-						<div class="inner">
-							<header>
-								<h1>Main Page<br />
-								<a href="http://127.0.0.1:8000/accounts/logout">LOGOUT</a>/
-								<a href="/menu/order/">ORDER</a></h1>
-								<p>JONNA SIBAL GAEGOTNAE</p>
-							</header>
-							{% if order_info %}
-							<section class="tiles">
-								{% for orders in order_info %}
-								<article class="style1">
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+
+
+</style>
+<body class="is-preload">
+<!-- Wrapper -->
+<div id="wrapper">
+
+    <!-- Header -->
+    <header id="header">
+        <div class="inner">
+
+            <!-- Logo -->
+            <a href="index.html" class="logo">
+                <span class="symbol"><img src="{% static 'home/images/logo.svg' %}" alt=""/></span><span class="title">MainPage</span>
+            </a>
+
+            <!-- Nav -->
+            <nav>
+                <ul>
+                    <li><a href="#menu">Menu</a></li>
+                </ul>
+            </nav>
+
+        </div>
+    </header>
+
+    <!-- Menu -->
+    <nav id="menu">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="/home/mypage/">MyPage</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+            <header>
+                <h1>Main Page<br/>
+                    <a href="http://127.0.0.1:8000/accounts/logout">LOGOUT</a>/
+                    <div class="dropdown">
+                        <span>ORDER</span>
+                        <div class="dropdown-content">
+							<a href="/menu/order1/"><font size="6">I want to drink!</font></a>
+							<a href="/menu/order2/"><font size="6">Let's drink!</font></a>
+                        </div>
+                    </div>
+                </h1>
+                <p>JONNA SIBAL GAEGOTNAE</p>
+            </header>
+			<br>
+			<br>
+            <section class="tiles">
+				{% if order_info %}
+                {% for orders in order_info %}
+                {% if orders.color == 0 %}
+                <article class="style1">
 									<span class="image">
-										<img src="{% static 'home/images/pic01.jpg' %}" alt="" />
+										<img src="{% static 'home/images/pic01.jpg' %}" alt=""/>
 									</span>
-									<a href="/menu/order_detail/{{orders.index}}">
-										<h2>{{orders.store_name}}
-										{{orders.menu_name}} </h2>
-										<div class="content">
-											<p>To {{orders.location}},Until {{orders.time}}</p>
-										</div>
-									</a>
-								</article>
-								{% endfor %}
-								{% endif %}
-							</section>
-						</div>
-					</div>
+                    <a href="/menu/order_detail/{{orders.index}}">
+                        <b><font size="5"> I WANT</font><br>
+                            <font size="6.8" ]>
+                                {{orders.store_name}}<br>
+                                {{orders.menu_name}} </font></b>
+                        <div class="content">
+                            <p>To {{orders.location}},Until {{orders.time}}</p>
+                        </div>
+                    </a>
+                </article>
 
-				<!-- Footer -->
-					<footer id="footer">
-						<div class="inner">
-							<section>
-								<h2>Get in touch</h2>
-								<form method="post" action="#">
-									<div class="fields">
-										<div class="field half">
-											<input type="text" name="name" id="name" placeholder="Name" />
-										</div>
-										<div class="field half">
-											<input type="email" name="email" id="email" placeholder="Email" />
-										</div>
-										<div class="field">
-											<textarea name="message" id="message" placeholder="Message"></textarea>
-										</div>
-									</div>
-									<ul class="actions">
-										<li><input type="submit" value="Send" class="primary" /></li>
-									</ul>
-								</form>
-							</section>
-							<section>
-								<h2>Follow</h2>
-								<ul class="icons">
-									<li><a href="#" class="icon brands style2 fa-twitter"><span class="label">Twitter</span></a></li>
-									<li><a href="#" class="icon brands style2 fa-facebook-f"><span class="label">Facebook</span></a></li>
-									<li><a href="#" class="icon brands style2 fa-instagram"><span class="label">Instagram</span></a></li>
-									<li><a href="#" class="icon brands style2 fa-dribbble"><span class="label">Dribbble</span></a></li>
-									<li><a href="#" class="icon brands style2 fa-github"><span class="label">GitHub</span></a></li>
-									<li><a href="#" class="icon brands style2 fa-500px"><span class="label">500px</span></a></li>
-									<li><a href="#" class="icon solid style2 fa-phone"><span class="label">Phone</span></a></li>
-									<li><a href="#" class="icon solid style2 fa-envelope"><span class="label">Email</span></a></li>
-								</ul>
-							</section>
-							<ul class="copyright">
-								<li>&copy; Untitled. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-							</ul>
-						</div>
-					</footer>
+                {% elif orders.color == 1 %}
+                <article class="style2">
+										<span class="image">
+										<img src="{% static 'home/images/pic01.jpg' %}" alt=""/>
+									</span>
+                    <a href="/menu/order_detail/{{orders.index}}">
+                        <b><font size="5"> I WANT</font><br>
+                            <font size="6.8">
+                                {{orders.store_name}}<br>
+                                {{orders.menu_name}} </font>
+                        </b>
+                        <div class="content">
+                            <p>To {{orders.location}},Until {{orders.time}}</p>
+                        </div>
+                    </a>
+                </article>
+                {% elif orders.color == 2 %}
+                <article class="style5">
+									<span class="image">
+										<img src="{% static 'home/images/pic01.jpg' %}" alt=""/>
+									</span>
+                    <a href="/menu/order_detail/{{orders.index}}">
+                        <b><font size="5"> I WANT</font><br>
+                            <font size="6.8" ]>
+                                {{orders.store_name}}<br>
+                                {{orders.menu_name}} </font></b>
+                        <div class="content">
+                            <p>To {{orders.location}},Until {{orders.time}}</p>
+                        </div>
+                    </a>
+                </article>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
 
-			</div>
+				 {% if order_info2 %}
+                {% for orders2 in order_info2 %}
+                {% if orders2.color == 0 %}
+                <article class="style4">
+									<span class="image">
+										<img src="{% static 'home/images/pic01.jpg' %}" alt=""/>
+									</span>
+                    <a href="/menu/order_detail2/{{orders2.index}}">
+                        <b><font size="5">Would you like</font><br>
+                            <font size="6.8" ]>
+                                {{orders2.store_name}}<br>
+                                drink?</font></b>
+                        <div class="content">
+                            <p>I'll go to {{orders2.location}},Until {{orders2.time}}</p>
+                        </div>
+                    </a>
+                </article>
 
-		<!-- Scripts -->
-			<script src="{% static 'home/assets/js/jquery.min.js' %}"></script>
-			<script src="{% static 'home/assets/js/browser.min.js' %}"></script>
-			<script src="{% static 'home/assets/js/breakpoints.min.js' %}"></script>
-			<script src="{% static 'home/assets/js/util.js' %}"></script>
-			<script src="{% static 'home/assets/js/main.js' %}"></script>
+                {% elif orders2.color == 1 %}
+                <article class="style5">
+										<span class="image">
+										<img src="{% static 'home/images/pic01.jpg' %}" alt=""/>
+									</span>
+                    <a href="/menu/order_detail2/{{orders2.index}}">
+                        <b><font size="5">Would you like</font><br>
+                            <font size="6.8">
+                                {{orders2.store_name}}<br>
+                                drink?</font>
+                        </b>
+                        <div class="content">
+                            <p>I will go to {{orders2.location}},Until {{orders2.time}}</p>
+                        </div>
+                    </a>
+                </article>
+                {% elif orders2.color == 2 %}
+                <article class="style6">
+									<span class="image">
+										<img src="{% static 'home/images/pic01.jpg' %}" alt=""/>
+									</span>
+                    <a href="/menu/order_detail2/{{orders2.index}}">
+                        <b><font size="5">Would you like</font><br>
+                            <font size="6.8" >
+                                {{orders2.store_name}}<br>
+                               	drink? </font></b>
+                        <div class="content">
+                            <p>I will go to {{orders2.location}},Until {{orders2.time}}</p>
+                        </div>
+                    </a>
+                </article>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </section>
+        </div>
+    </div>
 
-	</body>
+    <!-- Footer -->
+
+    <!-- Scripts -->
+    <script src="{% static 'home/assets/js/jquery.min.js' %}"></script>
+    <script src="{% static 'home/assets/js/browser.min.js' %}"></script>
+    <script src="{% static 'home/assets/js/breakpoints.min.js' %}"></script>
+    <script src="{% static 'home/assets/js/util.js' %}"></script>
+    <script src="{% static 'home/assets/js/main.js' %}"></script>
+    <script>
+			{% if message %}
+				message = "{{message}}";
+				console.log(message);
+				alert(message);
+				window.location.href = "/home/"
+				{% endif %}
+
+
+
+
+
+    </script>
+</div>
+</body>
 </html>

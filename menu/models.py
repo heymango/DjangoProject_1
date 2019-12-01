@@ -36,3 +36,13 @@ sql3 = '''
         '''
 #cursor.execute(sql3)
 #db.commit()
+sql3 = '''
+            CREATE TABLE orders_2 (
+                   name VARCHAR(10),
+                   store_name VARCHAR(100),
+                   tel VARCHAR(20),
+                   location VARCHAR(200),
+                   time DATETIME DEFAULT CURRENT_TIMESTAMP,
+                   isFinished BOOLEAN DEFAULT '0'
+            );
+        '''
