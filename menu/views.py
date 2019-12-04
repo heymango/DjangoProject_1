@@ -5,70 +5,67 @@ from django.views.generic import View
 from .forms import *
 from datetime import datetime
 
-store_name = ''
+store_id = 0
+menu_id =0
+store_name =''
 menu_name = ''
-
-
 def Order1(request):
+    global store_id, store_id, menu_name, menu_id
     print(request)
     if request.POST.get('GoHome') is not None:
         print("hi")
         return redirect('/home/')
     global store_name, menu_name
-    db = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='yongyong19', db='cafe', charset='utf8')
+    db = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='yongyong19', db='mango_smoothie', charset='utf8')
     if request.POST.get('submit_order') is not None:
+        print(0000000)
         if request.user.is_authenticated:
             username = request.user.username
-            db2 = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='yongyong19', db='accounts',
-                                  charset='utf8')
-            cursor = db2.cursor()
-            sql = "SELECT phone FROM student_user WHERE name = %s"
-            cursor.execute(sql, username)
-            userphone = cursor.fetchone()
-            cursor.close()
-            db2.close()
             cursor = db.cursor()
-            sql = "INSERT INTO orders(name, menu_name, store_name, tel, location, order_time) VALUES(%s,%s,%s,%s,%s,%s)"
-            cursor.execute(sql,
-                           (username, menu_name, store_name, userphone, request.POST['place'], request.POST['time'],))
+            phone = "SELECT user_tel FROM user WHERE user_name = %s"
+            cursor.execute(phone, username)
+            phone = cursor.fetchone()
+            insert = '''INSERT INTO orders (menu_id, user_id, store_id, location, deadline, orderS_point) 
+                     SELECT a.menu_id, b.user_id, c.store_id, %s,%s,%s
+                     from menu a, user b, store c 
+                     WHERE(a.menu_name = %s and b.user_name = %s and c.store_name = %s)'''
+            cursor.execute(insert,
+                           (request.POST['place'],request.POST['time'],request.POST['point'],menu_name, username, store_name))
             db.commit()
             cursor.close()
             return redirect('/home/')
 
     if request.POST.get('menu') is not None:
-        menuname = request.POST.get('menu')
+        menu_name = request.POST.get('menu')
         cursor = db.cursor()
-        menu = "SELECT *FROM menu WHERE menu_name = %s AND store_name = %s"
-        cursor.execute(menu, (menuname, store_name))
-        menu = cursor.fetchall()
-        selected_menu_info = []
-        for obj in menu:
-            data_dic = {
-                'menu': obj[0],
-                'price': obj[2],
-                'store': obj[1]
-            }
-            menu_name = obj[0]
-            selected_menu_info.append(data_dic)
-            cursor.close()
-            return render(request, 'menu/order/order_form.html', {"menu": obj[0], "storename": obj[1], "price": obj[2]})
+        menu = "SELECT *FROM menu WHERE menu_name = %s AND store_id = %s"
+        cursor.execute(menu, (menu_name, store_id))
+        menu = cursor.fetchone()
+        menu_id = menu[0]
+        price = menu[2]
+        cursor.close()
+        return render(request, 'menu/order/order_form.html', {"menu": menu_name, "storename": store_name, "price": price})
     if request.POST.get('store') is not None:
-        store = request.POST.get('store')
+        store_name = request.POST.get('store') #save in global store_name
         cursor = db.cursor()
-        menu = "SELECT *FROM menu WHERE store_name = %s"
-        cursor.execute(menu, store)
+        get_id = "SELECT store_id FROM store WHERE store_name = %s"
+        cursor.execute(get_id, store_name)
+        get_id = cursor.fetchone()
+        store_id = get_id[0] #save store_id
+        menu = "SELECT *FROM menu WHERE store_id = %s"
+        cursor.execute(menu, store_id)
         menu = cursor.fetchall()
         menu_list = []
         for obj in menu:
             data_dic = {
-                'menu': obj[0],
+                'menu': obj[1],
                 'price': obj[2],
-                'store': store
+                'store': store_name
             }
             menu_list.append(data_dic)
-        store_name = store
         cursor.close()
-        return render(request, 'menu/order/order_form.html', {"menulist": menu_list, "storename": store})
+        return render(request, 'menu/order/order_form.html', {"menulist": menu_list, "storename": store_name})
+
     cursor = db.cursor()
     store = "select *from store"
     cursor.execute(store)
@@ -76,7 +73,7 @@ def Order1(request):
     data_list = []
     for obj in store:
         data_dic = {
-            'store': obj[0],
+            'store': obj[1],
             'location': obj[2]
         }
         data_list.append(data_dic)
@@ -139,11 +136,21 @@ def order_detail(request, pk):
         if user_order == user_me:
             messages = " Cannot accept my order"
             return render(request, 'home/index.html', {"message": messages})
-        cursor2 = db.cursor()
-        sql2 = "UPDATE orders  SET isFinished = '1', accept_user = %s WHERE no = %s"
-        cursor2.execute(sql2, (user_me, pk))
+        cursor_order = db.cursor()
+        sql2 = "UPDATE orders  SET isAccepted = 1, accept_user = %s WHERE no = %s"
+        cursor_order.execute(sql2, (user_me, pk))
         db.commit()
-        cursor2.close()
+        point = "SELECT point FROM orders WHERE no = %s"
+        cursor_order.execute(point, pk)
+        point = cursor_order.fetchone()
+        print(point[0])
+        cursor_order.close()
+        db = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='yongyong19', db='accounts', charset='utf8')
+        cursor_point = db.cursor()
+        update_point = "UPDATE student_user SET point = point - %s WHERE name = %s"
+        cursor_point.execute(update_point,(point[0],user_me))
+        db.commit()
+        cursor_point.close()
         messages = "Accept Order!"
         return render(request, 'home/index.html', {"message": messages})
 
@@ -174,7 +181,7 @@ detail_list = []
 menu_list = []
 point = 0
 menu_final = ''
-totalprice =''
+totalprice =0
 def order_detail2(request, pk):
     global user_order2
     global store
@@ -230,7 +237,7 @@ def order_detail2(request, pk):
                 'price': obj[2],
                 'totalprice' : obj[2]+point
             }
-            totalprice =obj[2]+point
+            totalprice = obj[2]+point
             menu_list.append(data_dic)
         cursor_menu.close()
         return render(request, 'menu/order/order_detail2.html', {"detail": detail_list, "menuinfo": menu_list })
@@ -240,14 +247,15 @@ def order_detail2(request, pk):
             messages = " Cannot accept my order"
             return render(request, 'home/index.html', {"message": messages})
         cursor_order = db.cursor()
-        order = "UPDATE orders2 SET isFinished = IF(acceptNum >= 3,1,0) WHERE no = %s"
-        cursor_order.execute(order,pk)
+        order = "UPDATE orders2 SET isFinished = IF(acceptNum == (SELECT drinkNum FROM orders2 WHERE no = %s)-1,1,0) WHERE no = %s"
+        cursor_order.execute(order,(pk,pk))
         db.commit()
         order = "UPDATE orders2 SET acceptNum = acceptNum+1 WHERE no = %s"
         cursor_order.execute(order,pk)
         db.commit()
-        order = "INSERT INTO acceptuser VALUES(%s, %s, %s ,%s)"
         print(totalprice)
+        order = "INSERT INTO acceptuser VALUES(%s, %s, %s ,%s)"
+
         cursor_order.execute(order, (user_me, pk, menu_final, totalprice) )
         db.commit()
         messages = "Order success!"

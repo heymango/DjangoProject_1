@@ -6,112 +6,180 @@
 -->
 {% load static %}
 <html>
-	<head>
-		<title>MyPage</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="{% static 'home/assets/css/main.css' %}" />
-		<noscript><link rel="stylesheet" href="{% static 'home/assets/css/noscript.css' %}" /></noscript>
-	</head>
-	<body class="is-preload">
-		<!-- Wrapper -->
-			<div id="wrapper">
+<head>
+    <title>MyPage</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="{% static 'home/assets/css/main.css' %}"/>
+    <noscript>
+        <link rel="stylesheet" href="{% static 'home/assets/css/noscript.css' %}"/>
+    </noscript>
+</head>
+<body class="is-preload">
+<!-- Wrapper -->
+<div id="wrapper">
 
-				<!-- Header -->
-					<header id="header">
-						<div class="inner">
+    <!-- Header -->
+    <header id="header">
+        <div class="inner">
 
-							<!-- Logo -->
-								<a href="index.html" class="logo">
-									<span class="title">{{myname}}</span>
-								</a>
+           <h2>{{myname}} <br> MyPoint :{{mypoint}}</h2>
+            <nav>
+                <ul>
+                    <li><a href="#menu">Menu</a></li>
+                </ul>
+            </nav>
 
-							<!-- Nav -->
-								<nav>
-									<ul>
-										<li><a href="#menu">Menu</a></li>
-									</ul>
-								</nav>
+        </div>
+    </header>
+    <nav id="menu">
+        <h2>Menu</h2>
+        <ul>
+            <li><a href="/home/">Home</a></li>
+        </ul>
+    </nav>
+    <!-- Main -->
 
-						</div>
-					</header>
-						<nav id="menu">
-						<h2>Menu</h2>
-						<ul>
-							<li><a href="/home/">Home</a></li>
-						</ul>
-					</nav>
-				<!-- Main -->
+    <div id="main">
+        <div class="inner">
+            <h1>MyPage</h1>
+            <h2>Accept Order</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>OrderUser</th>
+                        <th>Menu</th>
+                        <th>Store</th>
+                        <th>PhoneNumber</th>
+                        <th>Location</th>
+                        <th>Time</th>
+                        <th>Finished</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-					<div id="main">
-						<div class="inner">
-							<h1>MyPage</h1>
-							<h2>Accept Order</h2>
-                                <div class="table-wrapper">
-										<table>
-											<thead>
-												<tr>
-													<th>No</th>
-													<th>OrderUser</th>
-													<th>Menu</th>
-                                                    <th>Store</th>
-                                                    <th>PhoneNumber</th>
-                                                    <th>Location</th>
-                                                    <th>Time</th>
-                                                    <th>Finished</th>
-												</tr>
-											</thead>
-											<tbody>
+                    {% for myorder in myorder_info %}
+                    <tr>
+                        <th><a href="/menu/order_detail/{{myorder.no}}">{{myorder.index}}</a></th>
+                        <th><a href="/menu/order_detail/{{myorder.no}}">{{myorder.order_user}}</a></th>
+                        <th>{{myorder.menu_name}}</th>
+                        <th>{{myorder.store_name}}</th>
+                        <th>{{myorder.order_phone}}</th>
+                        <th>{{myorder.location}}</th>
+                        <th>{{myorder.time}}</th>
+                        <th>{{myorder.isFinished}}</th>
+                    </tr>
+                    {% endfor %}
 
-                                                    {% for myorder in myorder_info %}
-                                                    {% if myorder.isFinished == '0' %}
-													<tr>
-                                                    <th><a href="/menu/order_detail/{{myorder.no}}">{{myorder.index}}</a></th>
-                                                    <th><a href="/menu/order_detail/{{myorder.no}}">{{myorder.order_user}}</a></th>
-													<th>{{myorder.menu_name}}</th>
-                                                    <th>{{myorder.store_name}}</th>
-                                                    <th>{{myorder.order_phone}}</th>
-                                                    <th>{{myorder.location}}</th>
-                                                    <th>{{myorder.time}}</th>
-                                                    <th>No</th>
-													</tr>
-                                                    {% else %}
-													<tr>
-                                                    <th><a href="/menu/order_detail/{{myorder.no}}">{{myorder.index}}</a></th>
-													<th><a href="/menu/order_detail/{{myorder.no}}">{{myorder.order_user}}</a></th>
-													<th>{{myorder.menu_name}}</th>
-                                                    <th>{{myorder.store_name}}</th>
-                                                    <th>{{myorder.order_phone}}</th>
-                                                    <th>{{myorder.location}}</th>
-                                                    <th>{{myorder.time}}</th>
-                                                    <th>Yes</th>
-													</tr>
-                                                    {% endif %}
-                                                    {% endfor %}
+                    <tfoot>
+                    <tr>
+                        <td colspan="7"></td>
+                        <td>test</td>
+                    </tr>
+                    </tfoot>
+                </table>
 
-                                            <tfoot>
-												<tr>
-													<td colspan="7"></td>
-													<td>test</td>
-												</tr>
-											</tfoot>
-										</table>
-									</div>
+            </div>
 
-						</div>
-					</div>
+            <h2>My Order(Applied to recruitment)</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Recruit User</th>
+                        <th>Menu</th>
+                        <th>Store</th>
+                        <th>PhoneNumber</th>
+                        <th>Location</th>
+                        <th>Time</th>
+                        <th>Price</th>
+                        <th>Finished</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
-				<!-- Footer -->
+                    {% for myorder2 in myorder_info2 %}
+                    <tr>
+                        <th><a href="/menu/order_detail2/{{myorder2.no}}">{{myorder2.index}}</a></th>
+                        <th><a href="/menu/order_detail2/{{myorder2.no}}">{{myorder2.order_user}}</a></th>
+                        <th>{{myorder2.menu_name}}</th>
+                        <th>{{myorder2.store_name}}</th>
+                        <th>{{myorder2.order_phone}}</th>
+                        <th>{{myorder2.location}}</th>
+                        <th>{{myorder2.time}}</th>
+                        <th>{{myorder2.price}}</th>
+                        <th>{{myorder2.isFinished}}</th>
+                    </tr>
+                    {% endfor %}
+
+                    <tfoot>
+                    <tr>
+                        <td colspan="7"></td>
+                        <td>test</td>
+                    </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+
+             <h2>My Order</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>AcceptUser</th>
+                        <th>Menu</th>
+                        <th>Store</th>
+                        <th>PhoneNumber</th>
+                        <th>Location</th>
+                        <th>Time</th>
+                        <th>Finished</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for myorder in myorder_info3 %}
+                    <tr>
+                        <th><a href="/menu/order_detail/{{myorder.no}}">{{myorder.index}}</a></th>
+                        <th><a href="/menu/order_detail/{{myorder.no}}">{{myorder.accept_user}}</a></th>
+                        <th>{{myorder.menu_name}}</th>
+                        <th>{{myorder.store_name}}</th>
+                        <th>{{myorder.order_phone}}</th>
+                        <th>{{myorder.location}}</th>
+                        <th>{{myorder.time}}</th>
+                        <th>{{myorder.isFinished}}</th>
+                    </tr>
+                    {% endfor %}
+
+                    <tfoot>
+                    <tr>
+                        <td colspan="7"></td>
+                        <td>test</td>
+                    </tr>
+                    </tfoot>
+                </table>
+
+            </div>
 
 
-			</div>
+        </div>
+    </div>
 
-		<!-- Scripts -->
-			<script src="{% static 'home/assets/js/jquery.min.js' %}"></script>
-			<script src="{% static 'home/assets/js/browser.min.js' %}"></script>
-			<script src="{% static 'home/assets/js/breakpoints.min.js' %}"></script>
-			<script src="{% static 'home/assets/js/util.js' %}"></script>
-			<script src="{% static 'home/assets/js/main.js' %}"></script>
+    <!-- Footer -->
 
-	</body>
+
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'home/assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'home/assets/js/browser.min.js' %}"></script>
+<script src="{% static 'home/assets/js/breakpoints.min.js' %}"></script>
+<script src="{% static 'home/assets/js/util.js' %}"></script>
+<script src="{% static 'home/assets/js/main.js' %}"></script>
+
+</body>
 </html>

@@ -88,20 +88,12 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'accounts',
+        'NAME': 'mango_smoothie',
         'HOST': 'localhost',
         'PORT': '3306',
         'USER': 'root',
         'PASSWORD': 'yongyong19',
     },
-    'cafe': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'cafe',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'USER': 'root',
-        'PASSWORD': 'yongyong19',
-    }
 }
 
 # Password validation

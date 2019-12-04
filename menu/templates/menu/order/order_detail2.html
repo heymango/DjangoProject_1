@@ -53,16 +53,20 @@
                                 <option value={{menu.menu}}><font color="black">{{menu.menu}}</font></option>
                                 {% endfor %}
                             </select>
-                        </div>
-
-
-                        <div style="width:30%">
-                            <input type="submit" value="Select menu!" class="primary" name="menu_name"/>
                             {% endif %}
                         </div>
 
+                            {% if menuinfo %}
+                        <div style="width:30%">
+                            <input type="submit" value="Select menu!" class="primary" name="menu_name"/>
+
+                        </div>
+                        {% endif %}
+
+                        <div class="col-12">
                         <!-- Display the countdown timer in an element -->
                         <p id="demo"></p>
+
                         <script>
 												// Set the date we're counting down to
 
@@ -101,7 +105,7 @@
 
 
                         </script>
-                        {% endfor %}
+                            {% endfor %}</div>
 
                         <div class="col-12">
                             <input type="submit" value="Ok, I'll take it" class="primary" name="submit"/></div>

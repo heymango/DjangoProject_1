@@ -59,6 +59,7 @@
 
 
 
+
 </style>
 <body class="is-preload">
 <!-- Wrapper -->
@@ -70,7 +71,7 @@
 
             <!-- Logo -->
             <a href="index.html" class="logo">
-                <span class="symbol"><img src="{% static 'home/images/logo.svg' %}" alt=""/></span><span class="title">MainPage</span>
+                <span class="symbol"><img src="{% static 'home/images/logo.svg' %}" alt=""/></span><span class="title">커피마실사람~</span>
             </a>
 
             <!-- Nav -->
@@ -100,19 +101,34 @@
                     <div class="dropdown">
                         <span>ORDER</span>
                         <div class="dropdown-content">
-							<a href="/menu/order1/"><font size="6">I want to drink!</font></a>
-							<a href="/menu/order2/"><font size="6">Let's drink!</font></a>
+                            <a href="/menu/order1/"><font size="6">I want to drink!</font></a>
+                            <a href="/menu/order2/"><font size="6">Let's drink!</font></a>
                         </div>
                     </div>
                 </h1>
                 <p>JONNA SIBAL GAEGOTNAE</p>
             </header>
-			<br>
-			<br>
+            <br>
+            <br>
             <section class="tiles">
-				{% if order_info %}
+                {% if order_info %}
                 {% for orders in order_info %}
-                {% if orders.color == 0 %}
+                {% if orders.isFinished == 1 %}
+                <article class="style7">
+									<span class="image">
+										<img src="{% static 'home/images/pic01.jpg' %}" alt=""/>
+									</span>
+                    <a href="/menu/order_detail/{{orders.index}}">
+                        <b><font size="5"> I WANT</font><br>
+                            <font size="6.8" ]>
+                                {{orders.store_name}}<br>
+                                {{orders.menu_name}} </font></b>
+                        <div class="content">
+                            <p>To {{orders.location}},Until {{orders.time}}</p>
+                        </div>
+                    </a>
+                </article>
+                {% elif orders.color == 0 %}
                 <article class="style1">
 									<span class="image">
 										<img src="{% static 'home/images/pic01.jpg' %}" alt=""/>
@@ -145,7 +161,7 @@
                     </a>
                 </article>
                 {% elif orders.color == 2 %}
-                <article class="style5">
+                <article class="style3">
 									<span class="image">
 										<img src="{% static 'home/images/pic01.jpg' %}" alt=""/>
 									</span>
@@ -162,10 +178,27 @@
                 {% endif %}
                 {% endfor %}
                 {% endif %}
+            </section>
+            <section class="tiles">
 
-				 {% if order_info2 %}
+                {% if order_info2 %}
                 {% for orders2 in order_info2 %}
-                {% if orders2.color == 0 %}
+                {% if orders2.isFinished == 1 %}
+                <article class="style7">
+									<span class="image">
+										<img src="{% static 'home/images/pic01.jpg' %}" alt=""/>
+									</span>
+                    <a href="/menu/order_detail2/{{orders2.index}}">
+                        <b><font size="5">Would you like</font><br>
+                            <font size="6.8" ]>
+                                {{orders2.store_name}}<br>
+                                drink?</font></b>
+                        <div class="content">
+                            <p>I'll go to {{orders2.location}},Until {{orders2.time}}</p>
+                        </div>
+                    </a>
+                </article>
+                {% elif orders2.color == 0 %}
                 <article class="style4">
 									<span class="image">
 										<img src="{% static 'home/images/pic01.jpg' %}" alt=""/>
@@ -204,9 +237,9 @@
 									</span>
                     <a href="/menu/order_detail2/{{orders2.index}}">
                         <b><font size="5">Would you like</font><br>
-                            <font size="6.8" >
+                            <font size="6.8">
                                 {{orders2.store_name}}<br>
-                               	drink? </font></b>
+                                drink? </font></b>
                         <div class="content">
                             <p>I will go to {{orders2.location}},Until {{orders2.time}}</p>
                         </div>
@@ -215,6 +248,7 @@
                 {% endif %}
                 {% endfor %}
                 {% endif %}
+
             </section>
         </div>
     </div>
@@ -234,6 +268,7 @@
 				alert(message);
 				window.location.href = "/home/"
 				{% endif %}
+
 
 
 
