@@ -41,11 +41,11 @@
                         </div>
 
 
-
                         <div style="width:70%">
                             {% if menuinfo %}
                             {% for menuinfo in menuinfo %}
-                            <b><font size="7">{{menuinfo.menu}} <br>Price : {{menuinfo.price}} + {{detail.point}} = <font color ="#f2849e">{{menuinfo.totalprice}}</font></font></b>
+                            <b><font size="7">{{menuinfo.menu}} <br>Price : {{menuinfo.price}} + {{detail.point}} =
+                                <font color="#f2849e">{{menuinfo.totalprice}}</font></font></b>
                             {% endfor %}
                             {% else %}
                             <select name='menu'>
@@ -56,18 +56,17 @@
                             {% endif %}
                         </div>
 
-                            {% if menuinfo %}
+                        {% if not menuinfo %}
                         <div style="width:30%">
                             <input type="submit" value="Select menu!" class="primary" name="menu_name"/>
-
                         </div>
                         {% endif %}
 
                         <div class="col-12">
-                        <!-- Display the countdown timer in an element -->
-                        <p id="demo"></p>
+                            <!-- Display the countdown timer in an element -->
+                            <p id="demo"></p>
 
-                        <script>
+                            <script>
 												// Set the date we're counting down to
 
 												var jbString ='{{detail.time}}';
@@ -104,12 +103,21 @@
 
 
 
-                        </script>
-                            {% endfor %}</div>
+
+                            </script>
+                        </div>
 
                         <div class="col-12">
-                            <input type="submit" value="Ok, I'll take it" class="primary" name="submit"/></div>
-
+                            <ul class="actions">
+                                {% if detail.finish == 0 %}
+                                <li><input type="submit" value="Ok, I'll take it" name = "submit" class="primary"/></li>
+                                {% else %}
+                                <li><span class="button primary disabled">Finished</span></li>
+                                {% endif %}
+                                <li><input type="submit" value="Go Home" class="primary" name="GoHome"/></li>
+                            </ul>
+                        </div>
+                        {% endfor %}
                     </div>
                 </form>
             </section>

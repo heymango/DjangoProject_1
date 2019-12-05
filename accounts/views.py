@@ -64,6 +64,7 @@ def login(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
+        print(user)
         if user is not None:
             cursor = db.cursor()
             sql = "UPDATE user SET is_active = '1' WHERE user_name=%s"

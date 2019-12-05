@@ -11,8 +11,8 @@ def home(request):
     db = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='yongyong19', db='mango_smoothie', charset='utf8')
     cursor = db.cursor()
     cursor2 = db.cursor()
-    orders = "SELECT * FROM orders, orders_status WHERE orders.orderS_id = orders_status.orderS_id ORDER BY FIELD(orders_status.is_finished, 1, 0) DESC, orders.deadline ASC"
-    orders2 = "SELECT * FROM ordert, ordert_status WHERE ordert.orderT_id = ordert_status.orderT_id ORDER BY FIELD(ordert_status.is_finished, 1, 0) DESC, ordert.deadline ASC"
+    orders = "SELECT * FROM orders, orders_status, store ,  menu WHERE orders.orderS_id = orders_status.orderS_id and orders.menu_id= menu.menu_id and orders.store_id=store.store_id ORDER BY FIELD(orders_status.is_finished, 1, 0) DESC, orders.deadline ASC"
+    orders2 = "SELECT * FROM ordert, ordert_status, store WHERE ordert.orderT_id = ordert_status.orderT_id AND ordert.store_id = store.store_id order BY FIELD(ordert_status.is_finished, 1, 0) DESC, ordert.deadline ASC"
     numOrder = "SELECT COUNT(*) FROM orders"
     numOrder2 = "SELECT COUNT(*) FROM ordert"
     cursor.execute(numOrder)
@@ -20,8 +20,8 @@ def home(request):
     numOrder  = cursor.fetchone()
     numOrder2 = cursor2.fetchone()
     num = 1
-    time= "REPLACE INTO time (no,timediff) SELECT no, time_to_sec(TIMEDIFF((SELECT order_time FROM orders where no = %s),curtime())) from orders where no = %s"
-    time2= "REPLACE INTO time (no,timediff) SELECT no, time_to_sec(TIMEDIFF((SELECT order_time FROM orders2 where no = %s),curtime())) from orders2 where no = %s"
+    time= "REPLACE INTO timediff_orders (orderS_id,timediff) SELECT orderS_id, time_to_sec(TIMEDIFF((SELECT deadline FROM orders where orderS_id = %s),curtime())) from orders where orderS_id = %s"
+    time2= "REPLACE INTO timediff_ordert (orderT_id,timediff) SELECT orderT_id, time_to_sec(TIMEDIFF((SELECT deadline FROM ordert where orderT_id = %s),curtime())) from ordert where orderT_id = %s"
     for num in range(numOrder[0]):
         cursor.execute(time, (int(num+1),int(num+1)))
         db.commit()
@@ -30,10 +30,10 @@ def home(request):
         cursor.execute(time2, (int(num+1),int(num+1)))
         db.commit()
 
-    timeUpdate = "UPDATE orders SET isFinished=1 WHERE no IN(SELECT no FROM time WHERE timediff<=0)"
+    timeUpdate = "UPDATE orders_status SET is_finished=1 WHERE orderS_id IN(SELECT orderS_id FROM timediff_orders WHERE timediff<=0)"
     cursor.execute(timeUpdate)
     db.commit()
-    timeUpdate2 = "UPDATE orders2 SET isFinished=1 WHERE no IN(SELECT no FROM time WHERE timediff<=0)"
+    timeUpdate2 = "UPDATE ordert_status SET is_finished=1 WHERE orderT_id IN(SELECT orderT_id FROM timediff_ordert WHERE timediff<=0)"
     cursor2.execute(timeUpdate2)
     db.commit()
     cursor2.close()
@@ -44,13 +44,13 @@ def home(request):
     order_info = []
     for obj in orders:
         data_dic = {
-            'index': obj[7],
-            'store_name': obj[2],
-            'menu_name': obj[1],
+            'index': obj[0],
+            'store_name': obj[12],
+            'menu_name': obj[16],
             'location': obj[4],
-            'isFinished' : obj[5],
-            'time': str(obj[6]),
-            'color': (obj[7] % 3)
+            'isFinished' : obj[9],
+            'time': str(obj[5]),
+            'color': (obj[0] % 3)
         }
         order_info.append(data_dic)
     cursor.execute(orders2)
@@ -59,13 +59,13 @@ def home(request):
 
     for obj in orders2:
         data_dic = {
-            'index': obj[6],
-            'store_name': obj[1],
-            'numdrink': obj[10],
-            'isFinished': obj[4],
+            'index': obj[0],
+            'store_name': obj[11],
+            'numdrink': obj[5],
+            'isFinished': obj[9],
             'location': obj[3],
-            'time': str(obj[5]),
-            'color': (obj[6] % 3)
+            'time': str(obj[4]),
+            'color': (obj[0] % 3)
         }
         order_info2.append(data_dic)
     cursor.close()
@@ -75,16 +75,14 @@ def home(request):
 
 @login_required
 def mypage(request):
-    db = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='yongyong19', db='cafe', charset='utf8')
+    db = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='yongyong19', db='mango_smoothie', charset='utf8')
     cursor = db.cursor()
     user_me = request.user.username
-    db_user = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='yongyong19', db='accounts', charset='utf8')
-    cursor_info = db_user.cursor()
-    point = "SELECT point FROM student_user where name = %s"
+    cursor_info = db.cursor()
+    point = "SELECT point FROM user where user_name = %s"
     cursor_info.execute(point, user_me)
     point = cursor_info.fetchone()[0]
     cursor_info.close()
-    db_user.close()
     sql = "select @rownum:=@rownum+1 as num, t.* from orders t, (SELECT @rownum:=0) r WHERE accept_user = %s"
     cursor.execute(sql, user_me)
     sql = cursor.fetchall()
