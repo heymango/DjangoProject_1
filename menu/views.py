@@ -28,12 +28,12 @@ def Order1(request):
             insert = '''INSERT INTO orders (menu_id, user_id, store_id, location, deadline, orderS_point) 
                      SELECT a.menu_id, b.user_id, c.store_id, %s,%s,%s
                      from menu a, user b, store c 
-                     WHERE(a.menu_name = %s and b.user_name = %s and c.store_name = %s)'''
+                     WHERE(a.menu_name = %s and b.user_name = %s and c.store_name = %s and a.store_id = %s)'''
             cursor.execute(insert,
                            (request.POST['place'], request.POST['time'], request.POST['point'], menu_name, username,
-                            store_name))
+                            store_name,store_id))
             db.commit()
-            insert_status = '''INSERT INTO orders_status(is_accepted) values(0)'''
+            insert_status = '''INSERT INTO orders_status(is_finished) values(0)'''
             cursor.execute(insert_status)
             db.commit()
             cursor.close()
@@ -143,24 +143,11 @@ def order_detail(request, pk):
         cursor = db.cursor()
         acceptorder = '''
                         UPDATE orders_status 
-                        SET is_accepted=1, user_id=(SELECT user_id FROM user WHERE user_name = %s)
+                        SET is_finished=1, user_id=(SELECT user_id FROM user WHERE user_name = %s)
                         WHERE orderS_id = %s
                   '''
         cursor.execute(acceptorder, (user_me, pk))
         db.commit()
-        point = "SELECT orderS_point FROM orders WHERE orderS_id = %s"
-        cursor.execute(point, pk)
-        point = cursor.fetchone()
-        print(point[0])
-        cursor.close()
-        cursor_point = db.cursor()
-        update_point = "UPDATE user SET user_point = user_point + %s WHERE user_name = %s"
-        cursor_point.execute(update_point, (point[0], user_me))
-        db.commit()
-        update_point = "UPDATE user SET user_point = user_point - %s WHERE user_name = %s"
-        cursor_point.execute(update_point, (point[0], user_order))
-        db.commit()
-        cursor_point.close()
         messages = "Accept Order!"
         return render(request, 'home/index.html', {"message": messages})
 
@@ -236,7 +223,7 @@ def order_detail2(request, pk):
             'time': str(obj[4]),
             'point': obj[6],
             'numremain': obj[5] - obj[10],
-            'finish': obj[11]
+            'finish': obj[11],
         }
         user_order2 = obj[7]
         point = obj[6]
@@ -301,3 +288,67 @@ def order_detail2(request, pk):
         return render(request, 'home/index.html', {"message": messages})
 
     return render(request, 'menu/order/order_detail2.html', {"detail": detail_list, "menu": menu_list})
+
+def my_order_detail(request,pk):
+    if request.POST.get('GoHome') is not None:
+        return redirect('/home/')
+    db = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='yongyong19', db='mango_smoothie',
+                         charset='utf8')
+    if request.POST.get('submit') is not None:
+        user_me = request.user.username
+        cursor = db.cursor()
+        update = "UPDATE orders_status SET is_delivered = 1 WHERE orderS_id = %s"
+        cursor.execute(update,pk)
+        db.commit()
+        point = "SELECT orderS_point FROM orders WHERE orderS_id = %s"
+        price = "SELECT menu_price FROM menu WHERE menu_id =(SELECT menu_id FROM orders WHERE orderS_id = %s)"
+        cursor.execute(point, pk)
+        point = cursor.fetchone()
+        cursor.execute(price, pk)
+        price = cursor.fetchone()
+        total_price = point[0]+price[0]
+        cursor.close()
+        cursor_point = db.cursor()
+        update_point = "UPDATE user SET user_point = user_point + %s WHERE user_name = %s"
+        cursor_point.execute(update_point, (total_price, user_me))
+        db.commit()
+        update_point = "UPDATE user SET user_point = user_point - %s WHERE user_name = %s"
+        cursor_point.execute(update_point, (total_price, user_order))
+        db.commit()
+        return render(request, 'home/index.html')
+
+    cursor = db.cursor()
+
+    orderinfo = '''
+                       SELECT O.*, U.user_name, U.user_tel, M.menu_name , S.store_name,T.is_finished
+                       FROM orders O
+                       INNER JOIN user U
+                       ON O.orderS_id= %s AND O.user_id = U.user_id  
+                       INNER JOIN store S  
+                       ON O.store_id = S.store_id 
+                       INNER JOIN menu M
+                       ON O.menu_id  = M.menu_id
+                       INNER JOIN orders_status T
+                       ON O.orderS_id  = T.orderS_id
+                   '''
+    cursor.execute(orderinfo,pk)
+    orderinfo = cursor.fetchall()
+    detail_list = []
+    for obj in orderinfo:
+        data_dic = {
+            'user_name': obj[7],
+            'menu_name': obj[9],
+            'store_name': obj[10],
+            'user_phone': obj[8],
+            'location': obj[4],
+            'time': str(obj[5]),
+            'finish': obj[11]
+        }
+        detail_list.append(data_dic)
+    cursor.close()
+
+    return render(request, 'menu/order/my_order_detail.html', {"detail": detail_list})
+
+
+
+

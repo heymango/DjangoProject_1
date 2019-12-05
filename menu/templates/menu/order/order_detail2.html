@@ -35,8 +35,8 @@
                                     drink?</font>
                                 <br><br><font size="7">Location : <font color="#f2849e">{{detail.location}}</font>
                                     / Time : until <font
-                                            color="#f2849e">{{detail.time}}<br>{{detail.numremain}}</font> orders
-                                    left!</font></b>
+                                            color="#f2849e">{{detail.time}}<br>{% if numremain > 0 %}{{detail.numremain}}{% endif %}</font> {% if numremain > 0 %}orders
+                                    left!{% endif %}</font></b>
                             <br><br>
                         </div>
 

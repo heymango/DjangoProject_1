@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+{% load static %}
+<html>
+<head>
+    <title>Order Detail</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="{% static 'home/assets/css/main.css' %}"/>
+    <noscript>
+        <link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}"/>
+    </noscript>
+</head>
+
+
+<body class="is-preload">
+<!-- Wrapper -->
+<div id="wrapper">
+    <!-- Main -->
+    <div id="main">
+        <div class="inner">
+            <h1>Order Detail</h1>
+            <section>
+                <form method="post"> {% csrf_token %}
+                    <div class="row gtr-uniform">
+                        <div class="col-12">
+                            <hr/>
+                            {% for detail in detail %}
+                            <b><font size="7" color="#f2849e">{{detail.user_name}} </font><font size="6">wants to
+                                drink </font>
+                                <br><br><font size="7" color="#f2849e">{{detail.store_name}} {{detail.menu_name}}</font>
+                                <br><br><font size="7">Location : <font color="#f2849e">{{detail.location}}</font>
+                                    / Time : until <font color="#f2849e">{{detail.time}}</font></font></b>
+                            <br><br>
+                            <hr/>
+                            <div class="col-12">
+											<ul class="actions">
+                                                <li><input type="submit" value="Delivery completed" class="primary"/></li>
+										<li><input type="submit" value="Go Home" class="primary" name="GoHome"/></li>
+											</ul>
+										</div>
+                             {% endfor %}
+
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="{% static 'home/assets/js/jquery.min.js' %}"></script>
+<script src="{% static 'home/assets/js/browser.min.js' %}"></script>
+<script src="{% static 'home/assets/js/breakpoints.min.js' %}"></script>
+<script src="{% static 'home/assets/js/util.js' %}"></script>
+<script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+</html>

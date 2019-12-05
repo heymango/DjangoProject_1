@@ -43,7 +43,7 @@
     <div id="main">
         <div class="inner">
             <h1>MyPage</h1>
-            <h2>Accept Order</h2>
+            <h2><font color="#f2849e">내가 배달할 주문! type1</font></h2>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -62,28 +62,21 @@
 
                     {% for myorder in myorder_info %}
                     <tr>
-                        <th><a href="/menu/order_detail/{{myorder.no}}">{{myorder.index}}</a></th>
+                        <th><a href="/menu/my_order_detail/{{myorder.no}}">{{myorder.index}}</a></th>
                         <th><a href="/menu/order_detail/{{myorder.no}}">{{myorder.order_user}}</a></th>
                         <th>{{myorder.menu_name}}</th>
                         <th>{{myorder.store_name}}</th>
                         <th>{{myorder.order_phone}}</th>
                         <th>{{myorder.location}}</th>
                         <th>{{myorder.time}}</th>
-                        <th>{{myorder.isFinished}}</th>
+                        <th>{% if myorder.isFinished == 1 %}yes{% else %}no{% endif %}</th>
                     </tr>
                     {% endfor %}
-
-                    <tfoot>
-                    <tr>
-                        <td colspan="7"></td>
-                        <td>test</td>
-                    </tr>
-                    </tfoot>
                 </table>
 
             </div>
 
-            <h2>My Order(Applied to recruitment)</h2>
+            <h2><font color="#f2849e">type2에 내가 주문한것들!</font></h2>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -95,7 +88,6 @@
                         <th>PhoneNumber</th>
                         <th>Location</th>
                         <th>Time</th>
-                        <th>Price</th>
                         <th>Finished</th>
                     </tr>
                     </thead>
@@ -110,22 +102,15 @@
                         <th>{{myorder2.order_phone}}</th>
                         <th>{{myorder2.location}}</th>
                         <th>{{myorder2.time}}</th>
-                        <th>{{myorder2.price}}</th>
-                        <th>{{myorder2.isFinished}}</th>
+                        <th>{% if myorder2.isFinished == 1 %}yes{% else %}no{% endif %}</th>
                     </tr>
                     {% endfor %}
 
-                    <tfoot>
-                    <tr>
-                        <td colspan="7"></td>
-                        <td>test</td>
-                    </tr>
-                    </tfoot>
                 </table>
 
             </div>
 
-             <h2>My Order</h2>
+            <h2><font color="#f2849e">내가 올린 주문! type1</font></h2>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -151,19 +136,42 @@
                         <th>{{myorder.order_phone}}</th>
                         <th>{{myorder.location}}</th>
                         <th>{{myorder.time}}</th>
-                        <th>{{myorder.isFinished}}</th>
+                        <th>{% if myorder.isFinished == 1 %}yes{% else %}no{% endif %}</th>
                     </tr>
                     {% endfor %}
-
-                    <tfoot>
-                    <tr>
-                        <td colspan="7"></td>
-                        <td>test</td>
-                    </tr>
-                    </tfoot>
                 </table>
 
             </div>
+
+            <h2><font color="#f2849e">내가 올린 모집! type2</font></h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Store</th>
+                        <th>MaxOrder</th>
+                        <th>Location</th>
+                        <th>Time</th>
+                        <th>Finished</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for myorder in myorder_info4 %}
+                    <tr>
+                        <th><a href="/menu/order_detail/{{myorder.no}}">{{myorder.index}}</a></th>
+                        <th>{{myorder.store_name}}</th>
+                        <th>{{myorder.maxorder}}</th>
+                        <th>{{myorder.location}}</th>
+                        <th>{{myorder.time}}</th>
+                        <th>{% if myorder.isFinished == 1 %}yes{% else %}no{% endif %}</th>
+                    </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+
 
 
         </div>

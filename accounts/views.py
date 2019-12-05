@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import get_hasher
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
@@ -8,6 +9,10 @@ from django.db import connection
 import pymysql
 
 
+def hashpassword(password):
+    hasher = get_hasher('default')
+    salt = hasher.salt()
+    return hasher.encode(password, salt)
 # Create your views here.
 def signup(request):
     db = pymysql.connect(host='127.0.0.1', port=3306, user='root', passwd='yongyong19', db='mango_smoothie', charset='utf8')
@@ -37,7 +42,7 @@ def signup(request):
             if result2:
                 messages.error(request, 'Already have same user ID')
                 return render(request, 'accounts/signup.html')
-
+            print(hashpassword(password))
             user = my_user.objects.create_user(
                 username=user_name, password=password, student_id = student_id
             )
@@ -102,3 +107,5 @@ def profile(request):
         data = {'last_login': request.user.last_login, 'username': request.user.username,
                 'password': request.user.password, 'is_authenticated': request.user.is_authenticated}
     return render(request, 'accounts/profile.html', context={'data': data})
+
+
